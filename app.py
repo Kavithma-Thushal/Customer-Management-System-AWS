@@ -8,15 +8,10 @@ app = Flask(__name__)
 # Provide AWS Credentials
 os.environ['AWS_ACCESS_KEY_ID'] = 'AKIAQ4NSBRLG6INV3V7A'
 os.environ['AWS_SECRET_ACCESS_KEY'] = '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'
-s3 = boto3.resource('s3')
+s3 = boto3.client('s3')
 
 # Define the S3 bucket name
 BUCKET_NAME = "ijse-s3-bucket"
-
-# Ensure the upload folder exists
-UPLOAD_FOLDER = 'uploads'
-if not os.path.exists(UPLOAD_FOLDER):
-    os.makedirs(UPLOAD_FOLDER)
 
 
 @app.route('/', methods=['GET', 'POST'])
@@ -30,21 +25,12 @@ def upload_file():
         if file:
             # Generate new filename based on the customer's name
             new_filename = f"{name.lower()}-profile-photo{os.path.splitext(file.filename)[1]}"
-            file_path = os.path.join(UPLOAD_FOLDER, new_filename)
 
-            # Save the file locally with the new name
-            file.save(file_path)
-
-            # Use the new filename as the S3 key
-            s3_key = new_filename
-
-            # Upload the file to S3
-            with open(file_path, 'rb') as f:
-                s3.Bucket(BUCKET_NAME).put_object(Key=s3_key, Body=f)
-            os.remove(file_path)  # Remove the local file after uploading
+            # Upload file directly to S3
+            s3.upload_fileobj(file, BUCKET_NAME, new_filename)
 
             # Save customer details to DB with the new filename
-            save_customer_to_db(name, address, salary, s3_key)
+            save_customer_to_db(name, address, salary, new_filename)
 
             # Redirect with a success flag
             return redirect(url_for('upload_file', success=1))
@@ -103,4 +89,4 @@ def upload_file():
 
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(host='0.0.0.0', port=80, debug=True)
