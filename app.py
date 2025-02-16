@@ -1,6 +1,7 @@
 from flask import Flask, request
 import boto3
 import os
+from customer_save import save_customer_to_db  # Import the function to save to DB
 
 app = Flask(__name__)
 
@@ -22,16 +23,23 @@ if not os.path.exists(UPLOAD_FOLDER):
 def upload_file():
     if request.method == 'POST':
         file = request.files['file']
+        name = request.form['name']
+        address = request.form['address']
+        salary = request.form['salary']
 
         if file:
             file_path = os.path.join(UPLOAD_FOLDER, file.filename)
             file.save(file_path)
             s3_key = file.filename
+
             with open(file_path, 'rb') as f:
                 s3.Bucket(BUCKET_NAME).put_object(Key=s3_key, Body=f)
             os.remove(file_path)
 
-            return "<h3'>Image uploaded successfully...!</h3>"
+            # Save customer details to DB
+            save_customer_to_db(name, address, salary, s3_key)
+
+            return f"<h3>Image uploaded successfully! <br> Name: {name} <br> Address: {address} <br> Salary: {salary}</h3>"
 
         return "<h3>No file uploaded...!</h3>"
 
@@ -52,6 +60,15 @@ def upload_file():
                     <div class="col-6 text-center shadow-lg p-5 rounded">
                         <h1 class="mb-4">Customer Management</h1>
                         <form method="POST" enctype="multipart/form-data">
+                            <div class="mb-3">
+                                <input type="text" name="name" class="form-control" placeholder="Name" required>
+                            </div>
+                            <div class="mb-3">
+                                <input type="text" name="address" class="form-control" placeholder="Address" required>
+                            </div>
+                            <div class="mb-3">
+                                <input type="number" name="salary" class="form-control" placeholder="Salary" required>
+                            </div>
                             <div class="mb-3 d-flex align-items-center">
                                 <input type="file" name="file" class="form-control me-2" required>
                                 <button type="submit" class="btn btn-primary">Upload</button>

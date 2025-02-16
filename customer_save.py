@@ -1,0 +1,24 @@
+import mysql.connector
+import os
+
+
+# Connect to MySQL Database
+def save_customer_to_db(name, address, salary, profile_photo):
+    mydb = mysql.connector.connect(
+        host="ijse-database.c1e684cqc92y.ap-south-1.rds.amazonaws.com",  # Directly add the host
+        user="root",  # Directly add the user
+        password="12345678",  # Directly add the password
+    )
+
+    mycursor = mydb.cursor()
+    mycursor.execute("USE aws")
+
+    # Insert the record into the customer table
+    mycursor.execute("""
+    INSERT INTO customer (name, address, salary, profile_photo)
+    VALUES (%s, %s, %s, %s)
+    """, (name, address, salary, profile_photo))
+
+    mydb.commit()
+
+    print("Customer saved successfully!")
