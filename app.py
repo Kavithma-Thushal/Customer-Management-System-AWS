@@ -1,5 +1,5 @@
 from flask import Flask, request, redirect, url_for
-from file_upload import file_upload
+from file_upload import upload_file
 
 app = Flask(__name__)
 
@@ -13,7 +13,7 @@ def main():
         salary = request.form['salary']
 
         if file:
-            result = file_upload(file, name, address, salary)
+            result = upload_file(file, name, address, salary)
 
             if result == "success":
                 return redirect(url_for('main', success=1))

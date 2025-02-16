@@ -11,7 +11,7 @@ s3 = boto3.client('s3')
 BUCKET_NAME = "ijse-s3-bucket"
 
 
-def file_upload(file, name, address, salary):
+def upload_file(file, name, address, salary):
     try:
         # Generate new filename based on the customer's name
         new_filename = f"{name.lower()}-profile-photo{os.path.splitext(file.filename)[1]}"
