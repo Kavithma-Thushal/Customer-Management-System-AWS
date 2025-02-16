@@ -37,7 +37,7 @@ def upload_file():
                 return redirect(url_for('upload_file', success=1))
             except Exception as e:
                 print(f"Error: {e}")
-                return "<h3>There was an error. Nothing was saved.</h3>"
+                return "<h3>There was an error...!</h3>"
 
     success_alert = request.args.get('success', '')
 
