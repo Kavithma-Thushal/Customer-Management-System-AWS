@@ -1,4 +1,4 @@
-from flask import Flask, request
+from flask import Flask, request, redirect, url_for
 import boto3
 import os
 from customer_save import save_customer_to_db  # Import the function to save to DB
@@ -46,11 +46,12 @@ def upload_file():
             # Save customer details to DB with the new filename
             save_customer_to_db(name, address, salary, s3_key)
 
-            return f"<h3>Image uploaded successfully! <br> Name: {name} <br> Address: {address} <br> Salary: {salary}</h3>"
+            # Redirect with a success flag
+            return redirect(url_for('upload_file', success=1))
 
-        return "<h3>No file uploaded...!</h3>"
+    success_alert = request.args.get('success', '')
 
-    return '''
+    return f'''
     <!doctype html>
     <html lang="en">
     <head>
@@ -58,6 +59,15 @@ def upload_file():
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Customer Management</title>
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+        <script>
+            window.onload = function() {{
+                var success = "{success_alert}";
+                if (success === "1") {{
+                    alert("Customer Saved Successfully...!");
+                    window.location.href = "/";
+                }}
+            }};
+        </script>
     </head>
     
     <body>
