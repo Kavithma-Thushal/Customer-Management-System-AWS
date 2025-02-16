@@ -26,14 +26,19 @@ def upload_file():
             # Generate new filename based on the customer's name
             new_filename = f"{name.lower()}-profile-photo{os.path.splitext(file.filename)[1]}"
 
-            # Upload file directly to S3
-            s3.upload_fileobj(file, BUCKET_NAME, new_filename)
+            try:
+                # Upload file directly to S3
+                s3.upload_fileobj(file, BUCKET_NAME, new_filename)
 
-            # Save customer details to DB with the new filename
-            save_customer_to_db(name, address, salary, new_filename)
+                # Save customer details to DB with the new filename
+                save_customer_to_db(name, address, salary, new_filename)
 
-            # Redirect with a success flag
-            return redirect(url_for('upload_file', success=1))
+                # Redirect with a success flag
+                return redirect(url_for('upload_file', success=1))
+            except Exception as e:
+                # Handle failure in either the S3 upload or DB saving
+                print(f"Error: {e}")
+                return "<h3>There was an error. Nothing was saved.</h3>"
 
     success_alert = request.args.get('success', '')
 
@@ -52,7 +57,7 @@ def upload_file():
                     alert("Customer Saved Successfully...!");
                     window.location.href = "/";
                 }}
-            }};
+            }}; 
         </script>
     </head>
     
