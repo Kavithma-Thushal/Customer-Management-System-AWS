@@ -28,15 +28,22 @@ def upload_file():
         salary = request.form['salary']
 
         if file:
-            file_path = os.path.join(UPLOAD_FOLDER, file.filename)
-            file.save(file_path)
-            s3_key = file.filename
+            # Generate new filename based on the customer's name
+            new_filename = f"{name.lower()}-profile-photo{os.path.splitext(file.filename)[1]}"
+            file_path = os.path.join(UPLOAD_FOLDER, new_filename)
 
+            # Save the file locally with the new name
+            file.save(file_path)
+
+            # Use the new filename as the S3 key
+            s3_key = new_filename
+
+            # Upload the file to S3
             with open(file_path, 'rb') as f:
                 s3.Bucket(BUCKET_NAME).put_object(Key=s3_key, Body=f)
-            os.remove(file_path)
+            os.remove(file_path)  # Remove the local file after uploading
 
-            # Save customer details to DB
+            # Save customer details to DB with the new filename
             save_customer_to_db(name, address, salary, s3_key)
 
             return f"<h3>Image uploaded successfully! <br> Name: {name} <br> Address: {address} <br> Salary: {salary}</h3>"
