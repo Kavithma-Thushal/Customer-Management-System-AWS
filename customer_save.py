@@ -13,6 +13,18 @@ def save_customer_to_db(name, address, salary, profile_photo):
     mycursor = mydb.cursor()
     mycursor.execute("USE aws")
 
+    # Create the customer table if it doesn't exist
+    mycursor.execute("""
+    CREATE TABLE IF NOT EXISTS customer (
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        name VARCHAR(255),
+        address VARCHAR(255),
+        salary FLOAT,
+        profile_photo VARCHAR(255)
+    )
+    """)
+    mydb.commit()
+
     # Insert the record into the customer table
     mycursor.execute("""
     INSERT INTO customer (name, address, salary, profile_photo)
