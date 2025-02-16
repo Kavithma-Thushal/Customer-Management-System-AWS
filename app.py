@@ -1,7 +1,7 @@
 import boto3
 import os
 from flask import Flask, request, redirect, url_for
-from customer_save import save_customer_to_db
+from customer_save import save_customer
 
 app = Flask(__name__)
 
@@ -31,7 +31,7 @@ def upload_file():
                 s3.upload_fileobj(file, BUCKET_NAME, new_filename)
 
                 # Save customer to the database
-                save_customer_to_db(name, address, salary, new_filename)
+                save_customer(name, address, salary, new_filename)
 
                 # Redirect with a success flag
                 return redirect(url_for('upload_file', success=1))

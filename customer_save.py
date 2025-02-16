@@ -2,7 +2,7 @@ import mysql.connector
 
 
 # Connect to MySQL Database
-def save_customer_to_db(name, address, salary, profile_photo):
+def save_customer(name, address, salary, profile_photo):
     mydb = mysql.connector.connect(
         host="ijse-database.c1e684cqc92y.ap-south-1.rds.amazonaws.com",
         user="root",
