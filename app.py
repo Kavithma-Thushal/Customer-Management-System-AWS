@@ -15,7 +15,7 @@ BUCKET_NAME = "ijse-s3-bucket"
 
 
 @app.route('/', methods=['GET', 'POST'])
-def upload_file():
+def main():
     if request.method == 'POST':
         file = request.files['file']
         name = request.form['name']
@@ -34,7 +34,7 @@ def upload_file():
                 save_customer(name, address, salary, new_filename)
 
                 # Redirect with a success flag
-                return redirect(url_for('upload_file', success=1))
+                return redirect(url_for('main', success=1))
             except Exception as e:
                 print(f"Error: {e}")
                 return "<h3>There was an error...!</h3>"
