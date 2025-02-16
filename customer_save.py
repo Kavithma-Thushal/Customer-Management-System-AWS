@@ -1,13 +1,12 @@
 import mysql.connector
-import os
 
 
 # Connect to MySQL Database
 def save_customer_to_db(name, address, salary, profile_photo):
     mydb = mysql.connector.connect(
-        host="ijse-database.c1e684cqc92y.ap-south-1.rds.amazonaws.com",  # Directly add the host
-        user="root",  # Directly add the user
-        password="12345678",  # Directly add the password
+        host="ijse-database.c1e684cqc92y.ap-south-1.rds.amazonaws.com",
+        user="root",
+        password="12345678",
     )
 
     mycursor = mydb.cursor()
@@ -33,4 +32,4 @@ def save_customer_to_db(name, address, salary, profile_photo):
 
     mydb.commit()
 
-    print("Customer saved successfully!")
+    print("Customer Saved Successfully...!")

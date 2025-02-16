@@ -1,7 +1,7 @@
-from flask import Flask, request, redirect, url_for
 import boto3
 import os
-from customer_save import save_customer_to_db  # Import the function to save to DB
+from flask import Flask, request, redirect, url_for
+from customer_save import save_customer_to_db
 
 app = Flask(__name__)
 
@@ -27,16 +27,15 @@ def upload_file():
             new_filename = f"{name.lower()}-profile-photo{os.path.splitext(file.filename)[1]}"
 
             try:
-                # Upload file directly to S3
+                # Upload file
                 s3.upload_fileobj(file, BUCKET_NAME, new_filename)
 
-                # Save customer details to DB with the new filename
+                # Save customer to the database
                 save_customer_to_db(name, address, salary, new_filename)
 
                 # Redirect with a success flag
                 return redirect(url_for('upload_file', success=1))
             except Exception as e:
-                # Handle failure in either the S3 upload or DB saving
                 print(f"Error: {e}")
                 return "<h3>There was an error. Nothing was saved.</h3>"
 
@@ -50,15 +49,6 @@ def upload_file():
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Customer Management</title>
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
-        <script>
-            window.onload = function() {{
-                var success = "{success_alert}";
-                if (success === "1") {{
-                    alert("Customer Saved Successfully...!");
-                    window.location.href = "/";
-                }}
-            }}; 
-        </script>
     </head>
     
     <body>
@@ -88,6 +78,15 @@ def upload_file():
                 </div>
             </div>
         </div>
+        
+        <script>
+            window.onload = function() {{
+                var success = "{success_alert}";
+                if (success === "1") {{
+                    alert("Customer Saved Successfully...!");
+                }}
+            }}; 
+        </script>
     </body>
     </html>
     '''
