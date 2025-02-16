@@ -32,4 +32,4 @@ def save_customer(name, address, salary, profile_photo):
 
     mydb.commit()
 
-    print("Customer Saved Successfully...!")
+    print("Customer saved successfully...!")

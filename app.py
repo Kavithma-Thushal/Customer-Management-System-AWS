@@ -1,17 +1,7 @@
-import boto3
-import os
 from flask import Flask, request, redirect, url_for
-from customer_save import save_customer
+from file_upload import file_upload
 
 app = Flask(__name__)
-
-# Provide AWS Credentials
-os.environ['AWS_ACCESS_KEY_ID'] = 'AKIAQ4NSBRLG6INV3V7A'
-os.environ['AWS_SECRET_ACCESS_KEY'] = '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'
-s3 = boto3.client('s3')
-
-# Define the S3 bucket name
-BUCKET_NAME = "ijse-s3-bucket"
 
 
 @app.route('/', methods=['GET', 'POST'])
@@ -23,21 +13,12 @@ def main():
         salary = request.form['salary']
 
         if file:
-            # Generate new filename based on the customer's name
-            new_filename = f"{name.lower()}-profile-photo{os.path.splitext(file.filename)[1]}"
+            result = file_upload(file, name, address, salary)
 
-            try:
-                # Upload file
-                s3.upload_fileobj(file, BUCKET_NAME, new_filename)
-
-                # Save customer to the database
-                save_customer(name, address, salary, new_filename)
-
-                # Redirect with a success flag
+            if result == "success":
                 return redirect(url_for('main', success=1))
-            except Exception as e:
-                print(f"Error: {e}")
-                return "<h3>There was an error...!</h3>"
+            else:
+                return "<h3>Failed to save the customer...!</h3>"
 
     success_alert = request.args.get('success', '')
 
@@ -83,7 +64,7 @@ def main():
             window.onload = function() {{
                 var success = "{success_alert}";
                 if (success === "1") {{
-                    alert("Customer Saved Successfully...!");
+                    alert("Customer saved successfully...!");
                 }}
             }}; 
         </script>
