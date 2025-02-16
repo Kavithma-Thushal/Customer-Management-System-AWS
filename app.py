@@ -65,7 +65,7 @@ def upload_file():
             <div class="container">
                 <div class="row justify-content-center mt-5">
                     <div class="col-6 text-center shadow-lg p-5 rounded">
-                        <h1 class="mb-4">Customer Management</h1>
+                        <h1 class="mb-5">Customer Management</h1>
                         <form method="POST" enctype="multipart/form-data">
                             <div class="mb-3">
                                 <input type="text" name="name" class="form-control" placeholder="Name" required>
@@ -76,9 +76,11 @@ def upload_file():
                             <div class="mb-3">
                                 <input type="number" name="salary" class="form-control" placeholder="Salary" required>
                             </div>
-                            <div class="mb-3 d-flex align-items-center">
-                                <input type="file" name="file" class="form-control me-2" required>
-                                <button type="submit" class="btn btn-primary">Upload</button>
+                            <div class="mb-3">
+                                <input type="file" name="file" class="form-control" required>
+                            </div>
+                            <div class="mb-3 text-center">
+                                <button type="submit" class="btn btn-primary px-4 mt-3">Save</button>
                             </div>
                         </form>
                     </div>
