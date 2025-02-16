@@ -65,6 +65,7 @@ def main():
                 var success = "{success_alert}";
                 if (success === "1") {{
                     alert("Customer saved successfully...!");
+                    window.location.href = "/";
                 }}
             }}; 
         </script>
