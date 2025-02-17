@@ -1,4 +1,4 @@
-# ⭐ AWS Customer Management System ⭐
+# ⭐ Customer Management System - AWS ⭐
 
 Welcome to the AWS Customer Management System project! This project involves building a customer management application
 where users can upload their profile photo, and the details will be saved to an AWS database and S3 bucket.
