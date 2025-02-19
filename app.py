@@ -1,5 +1,5 @@
 from flask import Flask, request, redirect, url_for
-from file_upload import upload_file
+from image_upload import upload_file
 
 app = Flask(__name__)
 
