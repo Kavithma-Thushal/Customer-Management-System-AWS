@@ -18,7 +18,7 @@ def main():
             if result == "success":
                 return redirect(url_for('main', success=1))
             else:
-                return "<h3>Failed to save the customer...!</h3>"
+                return "<h3>Failed to save the customer!</h3>"
 
     success_alert = request.args.get('success', '')
 
@@ -64,7 +64,7 @@ def main():
             window.onload = function() {{
                 var success = "{success_alert}";
                 if (success === "1") {{
-                    alert("Customer saved successfully...!");
+                    alert("Customer saved successfully!");
                     window.location.href = "/";
                 }}
             }}; 

@@ -10,19 +10,33 @@ def save_customer(name, address, salary, profile_photo):
     )
 
     mycursor = mydb.cursor()
+
+    # Create the aws database if it doesn't exist
+    mycursor.execute("SHOW DATABASES LIKE 'aws'")
+    result = mycursor.fetchone()
+    if not result:
+        mycursor.execute("CREATE DATABASE aws")
+        print("'aws' database created successfully!")
+
+    # Use the 'aws' database
     mycursor.execute("USE aws")
 
-    # Create the customer table if it doesn't exist
-    mycursor.execute("""
-    CREATE TABLE IF NOT EXISTS customer (
-        id INT AUTO_INCREMENT PRIMARY KEY,
-        name VARCHAR(255),
-        address VARCHAR(255),
-        salary FLOAT,
-        profile_photo VARCHAR(255)
-    )
-    """)
-    mydb.commit()
+    # Check if the customer table exists
+    mycursor.execute("SHOW TABLES LIKE 'customer'")
+    table_exists = mycursor.fetchone()
+
+    # Create the customer table only if it doesn't exist
+    if not table_exists:
+        mycursor.execute("""
+        CREATE TABLE customer (
+            id INT AUTO_INCREMENT PRIMARY KEY,
+            name VARCHAR(255),
+            address VARCHAR(255),
+            salary FLOAT,
+            profile_photo VARCHAR(255)
+        )
+        """)
+        print("'customer' table created successfully!")
 
     # Insert the record into the customer table
     mycursor.execute("""
@@ -31,5 +45,7 @@ def save_customer(name, address, salary, profile_photo):
     """, (name, address, salary, profile_photo))
 
     mydb.commit()
+    print("Customer saved successfully!")
 
-    print("Customer saved successfully...!")
+    mycursor.close()
+    mydb.close()

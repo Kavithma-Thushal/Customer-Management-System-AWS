@@ -3,8 +3,8 @@ import os
 from customer_save import save_customer
 
 # Provide AWS Credentials
-os.environ['AWS_ACCESS_KEY_ID'] = 'AKIAQ4NSBRLG6INV3V7A'
-os.environ['AWS_SECRET_ACCESS_KEY'] = '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'
+os.environ['AWS_ACCESS_KEY_ID'] = 'AKIAQ4NSBRLGTTGJ2G7J'
+os.environ['AWS_SECRET_ACCESS_KEY'] = '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'
 s3 = boto3.client('s3')
 
 # Define the S3 bucket name
@@ -25,4 +25,4 @@ def upload_file(file, name, address, salary):
         return "success"
     except Exception as e:
         print(f"Error: {e}")
-        return "Failed to save the customer...!"
+        return "Failed to save the customer!"
