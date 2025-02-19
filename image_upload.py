@@ -11,16 +11,16 @@ s3 = boto3.client('s3')
 BUCKET_NAME = "ijse-s3-bucket"
 
 
-def upload_file(file, name, address, salary):
+def upload_file(name, address, salary, file):
     try:
         # Generate new filename based on the customer's name
-        new_filename = f"{name.lower()}-profile-photo{os.path.splitext(file.filename)[1]}"
+        profile_photo = f"{name.lower()}-profile-photo{os.path.splitext(file.filename)[1]}"
 
         # Upload file to S3
-        s3.upload_fileobj(file, BUCKET_NAME, new_filename)
+        s3.upload_fileobj(file, BUCKET_NAME, profile_photo)
 
         # Save customer to the database
-        save_customer(name, address, salary, new_filename)
+        save_customer(name, address, salary, profile_photo)
 
         return "success"
     except Exception as e:

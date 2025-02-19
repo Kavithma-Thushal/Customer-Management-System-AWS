@@ -13,19 +13,17 @@ def save_customer(name, address, salary, profile_photo):
 
     # Create the aws database if it doesn't exist
     mycursor.execute("SHOW DATABASES LIKE 'aws'")
-    result = mycursor.fetchone()
-    if not result:
+    database_exists = mycursor.fetchone()
+    if not database_exists:
         mycursor.execute("CREATE DATABASE aws")
         print("'aws' database created successfully!")
 
     # Use the 'aws' database
     mycursor.execute("USE aws")
 
-    # Check if the customer table exists
+    # Create the customer table only if it doesn't exist
     mycursor.execute("SHOW TABLES LIKE 'customer'")
     table_exists = mycursor.fetchone()
-
-    # Create the customer table only if it doesn't exist
     if not table_exists:
         mycursor.execute("""
         CREATE TABLE customer (

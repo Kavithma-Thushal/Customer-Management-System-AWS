@@ -7,13 +7,13 @@ app = Flask(__name__)
 @app.route('/', methods=['GET', 'POST'])
 def main():
     if request.method == 'POST':
-        file = request.files['file']
         name = request.form['name']
         address = request.form['address']
         salary = request.form['salary']
+        file = request.files['file']
 
         if file:
-            result = upload_file(file, name, address, salary)
+            result = upload_file(name, address, salary, file)
 
             if result == "success":
                 return redirect(url_for('main', success=1))
