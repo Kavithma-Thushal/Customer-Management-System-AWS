@@ -3,8 +3,8 @@ import os
 from customer_save import save_customer
 
 # Provide AWS Credentials
-os.environ['AWS_ACCESS_KEY_ID'] = 'AKIAQ4NSBRLGTTGJ2G7J'
-os.environ['AWS_SECRET_ACCESS_KEY'] = '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'
+os.environ['AWS_ACCESS_KEY_ID'] = 'AKIAQ4NSBRLGTYL7GODC'
+os.environ['AWS_SECRET_ACCESS_KEY'] = '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'
 s3 = boto3.client('s3')
 
 # Define the S3 bucket name
